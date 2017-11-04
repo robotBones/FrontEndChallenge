@@ -56,6 +56,7 @@ function productobj(product) {
   self.title        = product.name
   self.tagline      = product.tagline
   self.url          = product.url
+  self.description  = product.description
   self.htmlview     = ""
   // Removed custom column classes. Flex box from bootstrap aligns columns.
 
@@ -79,8 +80,7 @@ function productobj(product) {
       .replace('{tagline}', self.tagline)
       .replace('{url}', self.url)
       .replace('{custom_class}', self.custom_class)
-      // I didn't see a description property
-      // .replace('{description}', self.description);
+      .replace('{description}', self.description);
   }
 }
 

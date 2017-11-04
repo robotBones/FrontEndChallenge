@@ -87,7 +87,7 @@ body.loaded > .page-overlay {
 }
 
 .product-description {
-  /* color: #000; */
+  font-size: 12px;
   position: relative;
   top: 50%;
   transform: translateY(-50%);
