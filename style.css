@@ -6,7 +6,9 @@ body.loading {
   overflow: hidden;
 }
 
-a.sale-link {
+a.sale-link,
+.product-title,
+.tagline {
   text-decoration: none;
   color: #48494b;
 }
