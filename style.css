@@ -1,9 +1,10 @@
 body {
+  overflow: hidden;
   font-family: "Arial";
 }
 
-body.loading {
-  overflow: hidden;
+body.loaded {
+  overflow: auto;
 }
 
 a.sale-link,
@@ -19,19 +20,19 @@ a.sale-link:hover {
 }
 
 .page-overlay {
-  opacity: 0;
-  transition: opacity 2s ease;
-}
-
-body.loading > .page-overlay {
   position: absolute;
   width: 100%;
   height: 100%;
   background-color: #000;
   overflow-y: hidden;
   opacity: 1;
-  z-index: 1;
-  transition: opacity 2s ease;
+  z-index: 100;
+}
+
+body.loaded > .page-overlay {
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.2s ease, z-index 0.2s;
 }
 
 .title {

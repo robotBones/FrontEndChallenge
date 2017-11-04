@@ -1,3 +1,17 @@
+function whenImagesLoaded(images) {
+  return Promise.all(images.map((image) => {
+    return new Promise((fulfill, reject) => {
+      // Listener should be removed
+      image.addEventListener('load', function() {
+        fulfill();
+      }, true);
+
+      image.addEventListener('error', function() {
+        reject();
+      }, true);
+    });
+  }));
+}
 
 function domobj(){
   var self        = this;
@@ -78,8 +92,25 @@ $.when(page.getproducts('data.json'), $.get('product-template.html'))
     console.log('building html');
     page.updateproducthtml(template[0]);
     page.updatedom()
+
     $('#content').on('click', '.dismiss-btn', function() {
       event.preventDefault();
-      $(event.target).closest('.product-container').addClass('product-removed');
+      $(event.target)
+        .closest('.product-container')
+        .addClass('product-removed');
     });
+
+    // Hide loading screen when images are loaded
+    var loadFirst = $('.js-product-image').toArray();
+    whenImagesLoaded(loadFirst).then(
+      // success
+      () => {
+        $('body').addClass('loaded');
+      },
+      // This error cb might execute before all promises resolve
+      // Don't prevent user from interaction
+      () => {
+        $('body').removeClass('loaded');
+      }
+    );
   });
