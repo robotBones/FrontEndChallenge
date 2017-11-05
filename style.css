@@ -7,6 +7,10 @@ body.loaded {
   overflow: auto;
 }
 
+.tagline {
+  font-size: 18px;
+}
+
 a.sale-link,
 .product-title,
 .product-tagline {

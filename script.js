@@ -1,4 +1,5 @@
 (function() {
+// I copied this fn from stack overflow
 function animateRotate(el, angle, cb) {
   var $elem = $(el);
   cb = cb || function() {};
@@ -36,7 +37,7 @@ function whenImagesLoaded(images) {
   }));
 }
 
-function PageView(){
+function PageView() {
   var self        = this;
   self.products   = [];
 
@@ -62,7 +63,6 @@ function PageView(){
     }
     $("#content").append(html)
   }
-
 }
 
 function Product(product) {
@@ -86,38 +86,44 @@ function Product(product) {
   }
 }
 
-var page = new PageView();
-// Use promises to chain async events. Refactored this first because
-// nothing was showing up in my browser due to race conditions
-$.when(page.getProducts('data.json'), $.get('product-template.html'))
-  .then(function(_, template) {
-    console.log('building html');
-    page.updateProductHTML(template[0]);
-    page.updateDOM()
+$(document).ready(function() {
+  var page = new PageView();
+  // Fetch requirements first and use promises to chain async events.
+  // I would prefer the product template to be compiled into an object
+  // and remain a property on the Product object but seeing how that's out
+  // of scope I pulled the get request out so I didn't have to mix async
+  // in the render methods and rely on setTimeouts. Even though browsers
+  // would cache the file this keeps AJAX requests out of a loop.
+  $.when(page.getProducts('data.json'), $.get('product-template.html'))
+    .then(function(_, template) {
+      console.log('building html');
+      page.updateProductHTML(template[0]);
+      page.updateDOM()
 
-    $('#content').on('click', '.dismiss-btn', function() {
-      event.preventDefault();
-      var product = $(event.target).closest('.product-container');
-      $(product).fadeOut(500)
-      animateRotate(product, 90, function() {
-        product.remove()
+      $('#content').on('click', '.dismiss-btn', function() {
+        event.preventDefault();
+        var product = $(event.target).closest('.product-container');
+        $(product).fadeOut(500)
+        animateRotate(product, 90, function() {
+          product.remove()
+        });
       });
-    });
 
-    // Hide loading screen when images are loaded
-    // Prefix class with 'js' so it's clear in markup it's a hook
-    var images = $('.js-product-image').toArray();
-    whenImagesLoaded(images).then(
-      // success
-      () => {
-        console.log('images loaded');
-        $('body').addClass('loaded');
-      },
-      // This error cb might execute before all promises resolve
-      // Show page so user can interact even for failed loads
-      () => {
-        $('body').removeClass('loaded');
-      }
-    );
-  });
+      // Hide loading screen when images are loaded
+      // Prefix class with 'js' so it's clear in markup it's a hook
+      var images = $('.js-product-image').toArray();
+      whenImagesLoaded(images).then(
+        // success
+        () => {
+          console.log('images loaded');
+          $('body').addClass('loaded');
+        },
+        // This error cb might execute before all promises resolve
+        // Show page so user can interact even for failed loads
+        () => {
+          $('body').removeClass('loaded');
+        }
+      );
+    });
+});
 })()
