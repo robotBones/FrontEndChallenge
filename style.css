@@ -28,6 +28,12 @@ a.sale-link:hover,
   color: #0096ff;
 }
 
+#content {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .page-overlay {
   position: absolute;
   width: 100%;
@@ -53,7 +59,8 @@ body.loaded > .page-overlay {
 }
 
 .product-container {
-  /* width:300px; let bootstrap handle size */
+  position: relative;
+  width:300px;
   border:1px solid #aaa;
   margin:10px;
   display:inline-block;

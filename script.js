@@ -42,15 +42,7 @@ function PageView(){
     var i=0
     html ='';
     for( i=0; i< self.products.length ; i++) {
-      if (i % 3 == 0 ) {
-        html += "<div class='row'>";
-        console.log("START");
-      }
       html += self.products[i].htmlView;
-      if ((i % 3 == 2) || i == (self.products.length-1) ) {
-        html += "</div>";
-        console.log("FINISH");
-      }
     }
     $("#content").append(html)
   }
