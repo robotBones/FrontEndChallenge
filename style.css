@@ -9,12 +9,21 @@ body.loaded {
 
 a.sale-link,
 .product-title,
-.tagline {
+.product-tagline {
   text-decoration: none;
   color: #48494b;
 }
 
-a.sale-link:hover {
+a.sale-link:visited,
+.product-title:visited,
+.product-tagline:visited {
+  text-decoration: none;
+  color: #48494b;
+}
+
+a.sale-link:hover,
+.product-title:hover,
+.product-tagline:hover {
   text-decoration: none;
   color: #0096ff;
 }
@@ -39,7 +48,7 @@ body.loaded > .page-overlay {
   font-size:36px;
 }
 
-.tagline {
+.product-tagline {
   font-size: 16px;
 }
 

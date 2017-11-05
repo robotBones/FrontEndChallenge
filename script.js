@@ -13,68 +13,55 @@ function whenImagesLoaded(images) {
   }));
 }
 
-function domobj(){
+function PageView(){
   var self        = this;
   self.products   = [];
 
-  self.getproducts = function(url) {
+  self.getProducts = function(url) {
     return $.getJSON(url, function(response) {
         for(i=0; i<response.sales.length ; i++) {
-          self.products.push( new productobj(response.sales[i])  );
+          self.products.push( new Product(response.sales[i])  );
         }
     });
   }
 
-  self.updateproducthtml = function(template) {
+  self.updateProductHTML = function(template) {
     for( i=0; i< self.products.length ; i++) {
-      self.products[i].updatehtml(template);
+      self.products[i].updateHTML(template);
     }
   }
 
-  self.updatedom = function() {
+  self.updateDOM = function() {
     var i=0
-    thishtml='';
+    html ='';
     for( i=0; i< self.products.length ; i++) {
       if (i % 3 == 0 ) {
-        thishtml += "<div class='row'>";
+        html += "<div class='row'>";
         console.log("START");
       }
-      thishtml += self.products[i].htmlview;
+      html += self.products[i].htmlView;
       if ((i % 3 == 2) || i == (self.products.length-1) ) {
-        thishtml += "</div>";
+        html += "</div>";
         console.log("FINISH");
       }
     }
-    $("#content").append(thishtml)
+    $("#content").append(html)
   }
 
 }
 
-function productobj(product) {
+function Product(product) {
   var self          = this;
   self.photo        = product.photos.medium_half
   self.title        = product.name
   self.tagline      = product.tagline
   self.url          = product.url
   self.description  = product.description
-  self.htmlview     = ""
+  self.htmlView     = ""
+
   // Removed custom column classes. Flex box from bootstrap aligns columns.
-
-  // template is getting reused so we fetch it once instead in the updated
-  // function below
-  // self.updatehtml= function(){
-  //   $.get('product-template.html', function(template){
-  //     self.htmlview = template
-  //       .replace('{image}', self.photo)
-  //       .replace('{title}', self.title)
-  //       .replace('{tagline}', self.tagline)
-  //       .replace('{url}', self.url)
-  //       .replace('{custom_class}', self.custom_class);
-  //   });
-  // }
-
-  self.updatehtml= function(template) {
-    self.htmlview = template
+  self.updateHTML = function(template) {
+    self.htmlView = template
       .replace('{image}', self.photo)
       .replace('{title}', self.title)
       .replace('{tagline}', self.tagline)
@@ -84,14 +71,14 @@ function productobj(product) {
   }
 }
 
-var page = new domobj();
+var page = new PageView();
 // Use promises to chain async events. Refactored this first because
 // nothing was showing up in my browser due to race conditions
-$.when(page.getproducts('data.json'), $.get('product-template.html'))
+$.when(page.getProducts('data.json'), $.get('product-template.html'))
   .then(function(_, template) {
     console.log('building html');
-    page.updateproducthtml(template[0]);
-    page.updatedom()
+    page.updateProductHTML(template[0]);
+    page.updateDOM()
 
     $('#content').on('click', '.dismiss-btn', function() {
       event.preventDefault();
@@ -101,14 +88,16 @@ $.when(page.getproducts('data.json'), $.get('product-template.html'))
     });
 
     // Hide loading screen when images are loaded
-    var loadFirst = $('.js-product-image').toArray();
-    whenImagesLoaded(loadFirst).then(
+    // Prefix class with 'js' so it's clear in markup it's a hook
+    var images = $('.js-product-image').toArray();
+    whenImagesLoaded(images).then(
       // success
       () => {
+        console.log('images loaded');
         $('body').addClass('loaded');
       },
       // This error cb might execute before all promises resolve
-      // Don't prevent user from interaction
+      // Show page so user can interact even for failed loads
       () => {
         $('body').removeClass('loaded');
       }
