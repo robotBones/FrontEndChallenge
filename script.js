@@ -1,14 +1,21 @@
+// Generate promises for images
+// and resolve them when they're loaded
 function whenImagesLoaded(images) {
   return Promise.all(images.map((image) => {
     return new Promise((fulfill, reject) => {
-      // Listener should be removed
-      image.addEventListener('load', function() {
-        fulfill();
-      }, true);
 
-      image.addEventListener('error', function() {
+      function handleLoaded() {
+        fulfill();
+        this.removeEventListener('load', handleLoaded, true)
+      }
+
+      function handleError() {
         reject();
-      }, true);
+        this.removeEventListener('error', handleError, true)
+      }
+
+      image.addEventListener('load', handleLoaded, true);
+      image.addEventListener('error', handleError, true);
     });
   }));
 }
