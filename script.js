@@ -91,7 +91,7 @@ $.when(page.getProducts('data.json'), $.get('product-template.html'))
       event.preventDefault();
       $(event.target)
         .closest('.product-container')
-        .addClass('product-removed');
+        .remove();
     });
 
     // Hide loading screen when images are loaded
