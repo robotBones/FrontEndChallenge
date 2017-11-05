@@ -1,3 +1,18 @@
+function animateRotate(el, angle, cb) {
+  var $elem = $(el);
+  cb = cb || function() {};
+
+  $({deg: 0}).animate({deg: angle}, {
+    duration: 1000,
+    step: function(now) {
+      $elem.css({
+        transform: 'rotateY(' + now + 'deg)'
+      });
+    },
+    complete: cb
+  });
+}
+
 // Generate promises for images
 // and resolve them when they're loaded
 function whenImagesLoaded(images) {
@@ -81,9 +96,10 @@ $.when(page.getProducts('data.json'), $.get('product-template.html'))
 
     $('#content').on('click', '.dismiss-btn', function() {
       event.preventDefault();
-      $(event.target)
-        .closest('.product-container')
-        .remove();
+      var product = $(event.target).closest('.product-container');
+      animateRotate(product, 270, function() {
+        product.remove()
+      });
     });
 
     // Hide loading screen when images are loaded
