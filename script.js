@@ -1,3 +1,4 @@
+(function() {
 function animateRotate(el, angle, cb) {
   var $elem = $(el);
   cb = cb || function() {};
@@ -119,3 +120,4 @@ $.when(page.getProducts('data.json'), $.get('product-template.html'))
       }
     );
   });
+})()
