@@ -3,7 +3,7 @@ function animateRotate(el, angle, cb) {
   cb = cb || function() {};
 
   $({deg: 0}).animate({deg: angle}, {
-    duration: 1000,
+    duration: 500,
     step: function(now) {
       $elem.css({
         transform: 'rotateY(' + now + 'deg)'
@@ -97,7 +97,8 @@ $.when(page.getProducts('data.json'), $.get('product-template.html'))
     $('#content').on('click', '.dismiss-btn', function() {
       event.preventDefault();
       var product = $(event.target).closest('.product-container');
-      animateRotate(product, 270, function() {
+      $(product).fadeOut(500)
+      animateRotate(product, 90, function() {
         product.remove()
       });
     });
